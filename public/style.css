@@ -1,6 +1,12 @@
 .token {
-    width : 20px;
-    height : 20px;
+    width : 100px;
+    height : 100px;
     border-radius : 50%;
     background-color: darkblue;
+    color : white;
+}
+#draggable-container {
+    border: 2px dashed #ccc;
+    padding: 10px;
+    min-height: 100px; /* Pour bien voir la zone */
 }

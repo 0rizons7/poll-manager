@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@shopify/draggable": "^1.1.4",
     "express": "^4.21.2",
     "socket.io": "^4.8.1"
   }
