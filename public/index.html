@@ -4,28 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Utilisateurs Connectés</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-    <script src="client.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+
+    <script src="/client.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Adresses IP des utilisateurs connectés :</h1>
     <ul id="usersList">
-
     </ul>
 
-    <div id="draggable-container">
-        <div class="token">Élément 1</div>
-    </div>
-
-    <script>
-        Sortable.create(document.getElementById('draggable-container'), {
-          animation: 150 // Petit effet smooth
-        });
-      </script>
+    <p class="token" id="token1" draggable="true">This element is draggable.</p>
 </body>
 </html>
-<!--node server.js-->
+<!--npm run start-->
 <!--ngrok http 8080-->

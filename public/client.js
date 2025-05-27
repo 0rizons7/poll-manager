@@ -1,4 +1,5 @@
 const socket = io();
+
 let users = [];
 let myIp = null;
 
@@ -11,21 +12,46 @@ socket.on("updateUsers", (usersArray) => {
     renderUsers();
 });
 
+
 function renderUsers() {
-    const $usersList = $("#usersList");
-    $usersList.empty();
+    const usersList = $("#usersList");
+
+    usersList.text("")
+
     const now = Date.now();
+
     users.forEach(({ ip, connectedAt }) => {
-        const secondsConnected = Math.floor((now - connectedAt) / 1000);
-        const $li = $("<li>").text(`${ip} - connecté depuis ${secondsConnected} secondes`);
+    const secondsConnected = Math.floor((now - connectedAt) / 1000);
 
-        if (ip === myIp) {
-            $li.css("color", "#0000"+Math.min(Math.floor(secondsConnected/2), 255).toString(16));
-            $li.css("font-weight", "bold");
-        }
+    const li = $("<li></li>").text(`${ip} - connecté depuis ${secondsConnected} secondes`)
 
-        $usersList.append($li);
+    if (ip === myIp) {
+        li.addClass("you")
+    }
+
+    usersList.append(li);
     });
 }
 
-setInterval(renderUsers, 1000);
+window.addEventListener("DOMContentLoaded", () => {
+    interact('.token').draggable({
+        inertia: true,
+        listeners: {
+            move : dragMoveListener,
+        },
+    })
+
+    setInterval(renderUsers, 1000);
+});
+
+function dragMoveListener (event) {
+    const target = event.target
+    
+    let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+    let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+    target.style.transform  = 'translate(' + x + 'px, ' + y + 'px)'
+
+    target.setAttribute('data-x', x)
+    target.setAttribute('data-y', y)
+}
