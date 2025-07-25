@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utilisateurs Connectés</title>
 
-    <script
-        src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <title>Poll Manager</title>
+
+    <script 
+        src="https://code.jquery.com/jquery-3.7.1.min.js" 
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+        crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-
-    <script src="/client.js"></script>
+    <script src="client.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Adresses IP des utilisateurs connectés :</h1>
-    <ul id="usersList">
-    </ul>
-
-    <p class="token" id="token1" draggable="true">This element is draggable.</p>
 </body>
 </html>
 <!--npm run start-->
-<!--ngrok http 8080-->

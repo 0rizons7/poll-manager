@@ -1,18 +1,26 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
 .token {
-    width: 100px;
-    height: 100px;
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
-    background-color: darkblue;
-    color: white;
-    cursor: grab;
+    position: absolute;
     user-select: none;
 }
 
-.token:active {
-    opacity: 0.5;
+.others {
+    background-color : #FF6208;
 }
 
 .you {
-    color : #00f;
-    font-weight : bold;
+    background-color : #086aff;
+    cursor: grab;
+    z-index: 9999;
+}
+.you:active {
+    opacity: 0.75;
 }
