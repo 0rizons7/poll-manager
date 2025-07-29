@@ -1,43 +1,55 @@
 const socket = io();
 
-let savedUsers = new Object();
+let cachedUsers = new Object();
+let cachedPollData = new Object()
 
-socket.on("sendingUsers", (users) => {
+socket.on("sendingUsers", (users, pollData) => {
     console.log("You are " + socket.id)
-    savedUsers = JSON.parse(users);
+    cachedUsers = JSON.parse(users);
+    cachedPollData = JSON.parse(pollData);
     onIdentified();
 });
 
 socket.on("updateUsers", (updatedUsers) => {
-    const savedIDs = Array.from(Object.keys(savedUsers));
-    const updatedIDs = Array.from(Object.keys(JSON.parse(updatedUsers)));
+    const parsedUpdatedUsers = JSON.parse(updatedUsers);
 
-    const usersToRemove = savedIDs.filter(id => !updatedIDs.includes(id));
-    const usersToAdd = updatedIDs.filter(id => !savedIDs.includes(id));
+    const cachedIDs = Array.from(Object.keys(cachedUsers));
+    const updatedIDs = Array.from(Object.keys(parsedUpdatedUsers));
 
-    console.log("Users to remove: ", usersToRemove);
-    console.log("Users to add: ", usersToAdd);
-
+    const usersToAdd = updatedIDs.filter(id => !cachedIDs.includes(id));
+    const usersToRemove = cachedIDs.filter(id => !updatedIDs.includes(id));
+    
     usersToRemove.forEach(id => {
         $(`#${id}`).remove()
     });
     usersToAdd.forEach(id => {
-        $("body").append(`<div id="${id}" class="token others" style="left: 50%; top: 50%;"></div>`);
+        $("body").append(`<div id="${id}" class="token others" style="left: 48.5vw; top: 50vh;"></div>`);
     });
 
-    savedUsers = JSON.parse(updatedUsers);
+    cacheUsers = parsedUpdatedUsers;
+});
+
+socket.on("updateVotes", (updatedPollData, updatedUsers) => {
+    cachedPollData = JSON.parse(updatedPollData);
+    cachedUsers = JSON.parse(updatedUsers);
+    for (const [option, data] of Object.entries(cachedPollData)) {
+        $(`#${option} .choice__percent`).text(data.percent + "%");
+        $(`#${option} .choice__votes`).text(data.votes + (data.votes > 1 ? " votes" : " vote"));
+        $("#" + option).css("width", data.percent+"%");
+    }
 });
 
 socket.on("updatePosition", (id, position) => {
-    console.log(position);
-    console.log(`Updating position for user ${id} to (${position.x}, ${position.y})`);
     $(`#${id}`).css({left: `${position.x}%`, top: `${position.y}%` })
 });
 
 function onIdentified() {
-    for (const [id, position] of Object.entries(savedUsers)) {
+    console.log(cachedPollData)
+    console.log(cachedUsers)
+    
+    for (const [id, position] of Object.entries(cachedUsers)) {
         console.log(`Adding user ${id} at position ${position.x}, ${position.y}`);
-        $("body").append(`<div id="${id}" class="token" style="left: ${position.x}%; top: ${position.y}%;"></div>`);
+        $("body").append(`<div id="${id}" class="token" style="left: ${position.x-1.5}vw; top: ${position.y}vh;"></div>`);
         $(`#${id}`).addClass(id === socket.id? "you" : "others");
     }
 
@@ -51,7 +63,8 @@ function onIdentified() {
         ], 
         listeners: {
             move : dragMoveListener,
-        },
+            end : dragEndListener
+        }
     });
 };
 
@@ -72,5 +85,10 @@ function dragMoveListener (event) {
   socket.emit("tokenMoved", rect.left / window.innerWidth * 100, rect.top / window.innerHeight * 100);
 }
 
-// this function is used later in the resizing and gesture demos
-window.dragMoveListener = dragMoveListener
+function dragEndListener(event){
+    const rect = event.target.getBoundingClientRect();
+    const newVote = rect.left < $("#option1").width() ? "option1" : "option2"
+    if (newVote !== cachedUsers[socket.id].vote) {
+        socket.emit("tokenDropped", cachedUsers[socket.id].vote, newVote);
+    }
+};
